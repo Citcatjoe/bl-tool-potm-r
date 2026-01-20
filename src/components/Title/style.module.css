@@ -1,0 +1,31 @@
+.title {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: block;
+}
+
+/* BRAND: BLICK */
+:global(.brand-blick) .title {
+  font-family: 'BlickVariable', sans-serif;
+  font-weight: 700;
+  text-transform: none;
+}
+
+:global(.brand-blick) h1.title { font-size: 3rem; }
+:global(.brand-blick) h2.title { font-size: 2.25rem; }
+:global(.brand-blick) h3.title { font-size: 1.75rem; }
+
+/* BRAND: PME */
+:global(.brand-pme) .title {
+  font-family: serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-top: 3px solid #E6005C;
+  display: block;
+  padding-top: 0.25rem;
+}
+
+:global(.brand-pme) h1.title { font-size: 2.5rem; letter-spacing: -0.02em; }
+:global(.brand-pme) h2.title { font-size: 1.875rem; }
+:global(.brand-pme) h3.title { font-size: 1.25rem; }

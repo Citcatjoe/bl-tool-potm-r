@@ -1,0 +1,49 @@
+.button {
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Styles pour la marque BLICK */
+:global(.brand-blick) .button {
+  border-radius: 9999px;
+  background: var(--color-fill-brand);
+  color: white;
+  font-family: 'InterVariable', sans-serif;
+  font-weight: 700;
+  padding: 0 1.5rem;
+  height: 48px;
+}
+
+:global(.brand-blick) .button:hover {
+  background: var(--color-fill-brand_hover);
+}
+
+:global(.brand-blick) .disabled {
+  opacity: 0.5;
+}
+
+/* Styles pour la marque PME */
+:global(.brand-pme) .button {
+  border-radius: 0px;
+  background: #00D1FF;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  padding: 12px 24px;
+}
+
+:global(.brand-pme) .disabled {
+  background: #333333;
+  color: #666666;
+  border-color: #444444;
+}

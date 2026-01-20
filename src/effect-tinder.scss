@@ -1,0 +1,164 @@
+/**
+ * UI Initiative Tinder Slider
+ *
+ * Tinder-like cards slider
+ *
+ * https://uiinitiative.com
+ *
+ * Copyright 2024 UI Initiative
+ *
+ * Released under the UI Initiative Regular License
+ *
+ * October 15, 2024
+ */
+ @import './styles/_variables';
+
+:root {
+  --swiper-tinder-no-color: red;
+  --swiper-tinder-yes-color: green;
+  --swiper-tinder-label-text-color: #fff;
+  --swiper-tinder-label-font-size: 32px;
+  --swiper-tinder-button-size: 56px;
+  --swiper-tinder-button-icon-size: 36px;
+}
+.swiper-tinder {
+  box-sizing: border-box;
+  .swiper-slide {
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+.swiper-tinder-label {
+  position: absolute;
+  font-size: var(--swiper-tinder-label-font-size);
+  font-weight: bold;
+  padding: 4px 12px;
+  text-transform: uppercase;
+  //border-radius: 4px;
+  opacity: 0;
+  color: var(--swiper-tinder-label-text-color);
+  z-index: 10;
+}
+.swiper-tinder-label-yes {
+  left: 3%;
+  top: 5%;
+  transform: rotate(-20deg);
+  //background-color: var(--swiper-tinder-yes-color);
+  background: var(--is-light-theme, var(--color-fill-default)) var(--is-dark-theme, var(--color-fill-brand));
+  
+  color: var(--is-light-theme, var(--color-text-brand)) var(--is-dark-theme, var(--color-text-inverse));
+  
+  transform-origin: right top;
+}
+
+.swiper-tinder-label-no {
+  right: 3%;
+  top: 5%;
+  transform: rotate(20deg);
+  //background-color: var(--swiper-tinder-no-color);
+  background: var(--color-stroke-strong);
+  color: var(--color-text-inverse);
+  //color: var(--is-light-theme, var(--color-fill-brand)) var(--is-dark-theme, var(--color-green-500));
+  transform-origin: left top;
+}
+.swiper-tinder-button {
+  position: absolute;
+  cursor: pointer;
+  bottom: 32px;
+  width: var(--swiper-tinder-button-size);
+  height: var(--swiper-tinder-button-size);
+  border: 2px solid;
+  border-radius: 999px;
+  background: transparent;
+  appearance: none;
+  outline: none;
+  box-shadow: none;
+  z-index: 100;
+  transition-duration: 100ms;
+  font-size: var(--swiper-tinder-button-icon-size) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  svg {
+    width: var(--swiper-tinder-button-icon-size);
+    height: var(--swiper-tinder-button-icon-size);
+  }
+  &-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  &-no {
+    //border-color: var(--swiper-tinder-no-color);
+    border-color: var(--color-grey-400);
+    //border-color: var(--color-fill-strongest);
+    //left: calc(33% - 28px);
+    left: 0;
+    bottom: 0;
+    @media (max-width: $sm) { // below 400px
+        left: auto;
+        right: calc(50% + 15px);
+    }
+    svg {
+      //fill: var(--swiper-tinder-no-color);
+      fill: var(--color-grey-400);
+      //fill: var(--color-fill-strongest);
+    }
+    &.swiper-tinder-button-active,
+    &:active {
+      // background: var(--swiper-tinder-no-color);
+      background: var(--color-grey-400);
+      svg {
+        fill: var(--color-fill-default);
+      }
+    }
+  }
+  &-yes {
+    //border-color: var(--swiper-tinder-yes-color);
+    border-color: var(--color-fill-brand);
+    //left: calc(66% - 28px);
+    right: 0;
+    bottom: 0;
+    @media (max-width: $sm) { // below 400px
+        right: auto;
+        left: calc(50% + 15px);
+    }
+    svg {
+      transform: translateY(2px);
+      //fill: var(--swiper-tinder-yes-color);
+      fill: var(--color-fill-brand);
+    }
+    &.swiper-tinder-button-active,
+    &:active {
+      //background: var(--swiper-tinder-yes-color);
+      background: var(--color-fill-brand);
+      svg {
+        fill: var(--color-fill-default);
+      }
+    }
+  }
+}
+
+
+#thumb-up,
+#thumb-down
+{
+  transform-origin: center center;
+  width: 25px;
+  height: auto;
+}
+
+#thumb-up
+{
+  transform: translateY(-2px);
+}
+
+#thumb-down
+{
+  transform: translateY(2px);
+}
