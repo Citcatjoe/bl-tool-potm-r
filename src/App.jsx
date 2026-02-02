@@ -14,62 +14,7 @@ import 'flag-icons/css/flag-icons.min.css';
 
 import iconTrophy from './assets/img/icon-trophy.svg';
 // Import dynamique des drapeaux
-// Mappage des pays vers les classes flag-icons
-const countryFlags = {
-    algérie: 'dz',
-    argentine: 'ar',
-    australie: 'au',
-    autriche: 'at',
-    belgique: 'be',
-    brésil: 'br',
-    canada: 'ca',
-    'cap vert': 'cv',
-    colombie: 'co',
-    croatie: 'hr',
-    curaçao: 'cw',
-    équateur: 'ec',
-    égypte: 'eg',
-    angleterre: 'gb-eng',
-    france: 'fr',
-    allemagne: 'de',
-    ghana: 'gh',
-    haïti: 'ht',
-    iran: 'ir',
-    "côte d'ivoire": 'ci',
-    japon: 'jp',
-    jordanie: 'jo',
-    mexique: 'mx',
-    maroc: 'ma',
-    'pays bas': 'nl',
-    'nouvelle-zélande': 'nz',
-    norvège: 'no',
-    panama: 'pa',
-    paraguay: 'py',
-    portugal: 'pt',
-    qatar: 'qa',
-    'arabie saoudite': 'sa',
-    écosse: 'gb-sct',
-    sénégal: 'sn',
-    'afrique du sud': 'za',
-    'corée du sud': 'kr',
-    espagne: 'es',
-    suisse: 'ch',
-    tunisie: 'tn',
-    'états unis': 'us',
-    uruguay: 'uy',
-    ouzbékistan: 'uz',
-    danemark: 'dk',
-    'états-unis': 'us',
-    finlande: 'fi',
-    'grande-bretagne': 'gb',
-    hongrie: 'hu',
-    italie: 'it',
-    lettonie: 'lv',
-    slovaquie: 'sk',
-    slovénie: 'si',
-    suède: 'se',
-    tchéquie: 'cz',
-};
+
 
 function getDistributedPercentages(players) {
     if (!players || players.length === 0) return [];
@@ -314,9 +259,8 @@ function App({ gridMode = false }) {
                             const maxPercentage = Math.max(...percentages);
                             
                             return potm.players.slice(0, Math.ceil(potm.players.length / 2)).map((player, index) => {
-                                const percent = percentages[index];
-                                const isWinner = percent === maxPercentage;
-                                const flagClass = countryFlags[player.team?.toLowerCase().trim()] || 'af';
+                                const percentage = percentages[index];
+                                const isWinner = percentage === maxPercentage;
 
                                 return (
                                 <li 
@@ -324,7 +268,9 @@ function App({ gridMode = false }) {
                                     className={`flex items-center relative gap-2 px-3 py-4 transition-all duration-500 ${!hasVoted ? 'can-vote' : ''} ${showWinnerHighlight && !isWinner ? 'dimmed' : ''}`}
                                     onClick={() => voteHandler(index)}
                                 >
-                                   <span className={`fi fis fi-${flagClass} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                   {player.type === 'national' && (
+                                       <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                   )}
                                     <div className="gap-2">
                                         <h3>{player.name}</h3>
                                         <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
@@ -348,7 +294,6 @@ function App({ gridMode = false }) {
                                 const actualIndex = index + Math.ceil(potm.players.length / 2);
                                 const percent = percentages[actualIndex];
                                 const isWinner = percent === maxPercentage;
-                                const flagClass = countryFlags[player.team?.toLowerCase().trim()] || 'af';
 
                                 return (
                                 <li 
@@ -356,7 +301,9 @@ function App({ gridMode = false }) {
                                     className={`flex items-center relative gap-2 px-3 py-4 transition-all duration-500 ${!hasVoted ? 'can-vote' : ''} ${showWinnerHighlight && !isWinner ? 'dimmed' : ''}`}
                                     onClick={() => voteHandler(actualIndex)}
                                 >
-                                    <span className={`fi fis fi-${flagClass} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                    {player.type === 'national' && (
+                                        <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                    )}
                                     <div className="gap-2">
                                         <h3>{player.name}</h3>
                                         <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
@@ -381,7 +328,6 @@ function App({ gridMode = false }) {
                         return potm.players.map((player, index) => {
                             const percent = percentages[index];
                             const isWinner = percent === maxPercentage;
-                            const flagClass = countryFlags[player.team?.toLowerCase().trim()] || 'af';
 
                             return (
                             <li 
@@ -389,7 +335,9 @@ function App({ gridMode = false }) {
                                 className={`relative flex items-center gap-2 px-3 py-3 transition-all duration-500 ${!hasVoted ? 'can-vote' : ''} ${showWinnerHighlight && !isWinner ? 'dimmed' : ''}`}
                                 onClick={() => voteHandler(index)}
                             >
-                                <span className={`fi fis fi-${flagClass} shrink-0 text-2xl sm:text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                {player.type === 'national' && (
+                                    <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-2xl sm:text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
+                                )}
                                 <div className="gap-2">
                                     <h3>{player.name}</h3>
                                     <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
