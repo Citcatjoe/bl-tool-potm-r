@@ -14,6 +14,78 @@ import 'flag-icons/css/flag-icons.min.css';
 
 import iconTrophy from './assets/img/icon-trophy.svg';
 // Import dynamique des drapeaux
+const teamLogos = import.meta.glob('./assets/img/flags/national_league/*.png', { eager: true, as: 'url' });
+
+function useDarkMode() {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        const checkDarkMode = () => {
+            setIsDarkMode(window.location.hash.includes('theme=dark') || window.location.search.includes('theme=dark'));
+        };
+        
+        // Check initially
+        checkDarkMode();
+
+        // Listen for hash changes in case it is updated dynamically
+        window.addEventListener('hashchange', checkDarkMode);
+        return () => window.removeEventListener('hashchange', checkDarkMode);
+    }, []);
+
+    return isDarkMode;
+}
+
+function getPlayerLogo(player, isDarkMode = false) {
+    if (!player || player.type !== 'national_league') return null;
+    
+    const imgName = player.img;
+    const teamSlug = player.team?.toLowerCase().replace(/\s+/g, '_');
+    const nameSlug = player.name?.toLowerCase().replace(/\s+/g, '_');
+    
+    const candidates = [
+        `./assets/img/flags/national_league/ch_${imgName}`,
+        `./assets/img/flags/national_league/${imgName}`,
+        `./assets/img/flags/national_league/ch_${teamSlug}.png`,
+        `./assets/img/flags/national_league/${teamSlug}.png`,
+        `./assets/img/flags/national_league/ch_${nameSlug}.png`,
+        `./assets/img/flags/national_league/${nameSlug}.png`
+    ];
+
+    let foundKey = null;
+    for (const path of candidates) {
+        if (teamLogos[path]) {
+            foundKey = path;
+            break;
+        }
+    }
+
+    if (!foundKey) {
+        // fuzzy search in keys
+        const searchTerms = [imgName, teamSlug, nameSlug].filter(Boolean);
+        for (const term of searchTerms) {
+            const termPure = term.replace(/\.(png|jpg|svg)$/, '').toLowerCase();
+            const found = Object.keys(teamLogos).find(key => 
+                key.toLowerCase().includes(termPure)
+            );
+            if (found) {
+                foundKey = found;
+                break;
+            }
+        }
+    }
+
+    if (foundKey) {
+        if (isDarkMode && foundKey.includes('ch_lugano.png')) {
+            const altKey = foundKey.replace('ch_lugano.png', 'ch_lugano_alt.png');
+            if (teamLogos[altKey]) {
+                return teamLogos[altKey];
+            }
+        }
+        return teamLogos[foundKey];
+    }
+
+    return null;
+}
 
 
 function getDistributedPercentages(players) {
@@ -41,6 +113,7 @@ function getDistributedPercentages(players) {
 }
 
 function App({ gridMode = false }) {
+    const isDarkMode = useDarkMode();
     
     const [docId, setDocId] = useState(null);
     const [potm, setPotm] = useState(null);
@@ -50,14 +123,6 @@ function App({ gridMode = false }) {
     const [showNbVotes, setShowNbVotes] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [showWinnerHighlight, setShowWinnerHighlight] = useState(false);
-
-    // Fonction pour capitaliser la première lettre
-    const capitalize = (str) => {
-        if (!str) return '';
-        return str.toLowerCase().split(' ').map(word => 
-            word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' ');
-    };
 
     const formatDate = (timestamp) => {
         if (!timestamp) return '';
@@ -271,9 +336,16 @@ function App({ gridMode = false }) {
                                    {player.type === 'national' && (
                                        <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
                                    )}
+                                   {player.type === 'national_league' && (
+                                       <img 
+                                            src={getPlayerLogo(player, isDarkMode)} 
+                                            className="w-8 h-8 shrink-0 mr-1 mt-0 shadow-xl object-contain" 
+                                            alt={player.name}
+                                       />
+                                   )}
                                     <div className="gap-2">
                                         <h3>{player.name}</h3>
-                                        <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
+                                        <span className="text-weak text-sm">{player.position} - {player.team}</span>
                                     </div>
                                     {(showResults) && (
                                         <span className="votesPercentage absolute right-4 top-1/2 -translate-y-1/2 text-weak text-sm font-bold">
@@ -304,9 +376,16 @@ function App({ gridMode = false }) {
                                     {player.type === 'national' && (
                                         <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
                                     )}
+                                    {player.type === 'national_league' && (
+                                        <img 
+                                             src={getPlayerLogo(player, isDarkMode)} 
+                                             className="w-8 h-8 shrink-0 mr-1 mt-0 shadow-xl object-contain" 
+                                             alt={player.name}
+                                        />
+                                    )}
                                     <div className="gap-2">
                                         <h3>{player.name}</h3>
-                                        <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
+                                        <span className="text-weak text-sm">{player.position} - {player.team}</span>
                                     </div>
                                      {(showResults) && (
                                         <span className="votesPercentage absolute right-4 top-1/2 -translate-y-1/2 text-weak text-sm font-bold">
@@ -338,9 +417,16 @@ function App({ gridMode = false }) {
                                 {player.type === 'national' && (
                                     <span className={`fi fis fi-${player.code?.toLowerCase()} shrink-0 text-2xl sm:text-3xl mr-1 mt-0 rounded-full shadow-xl`}></span>
                                 )}
+                                {player.type === 'national_league' && (
+                                    <img 
+                                         src={getPlayerLogo(player, isDarkMode)} 
+                                         className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 mr-1 mt-0 object-contain" 
+                                         alt={player.name}
+                                    />
+                                )}
                                 <div className="gap-2">
                                     <h3>{player.name}</h3>
-                                    <span className="text-weak text-sm">{player.position} - {capitalize(player.team)}</span>
+                                    <span className="text-weak text-sm">{player.position} - {player.team}</span>
                                 </div>
                                 {(showResults) && (
                                     <span className="votesPercentage absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold">
